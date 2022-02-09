@@ -26,8 +26,9 @@ $ source /sql/grafana.sql
 
 2. WebSocket
 
-소켓 통신을 실행하기 전 필요한 모듈을 추가로 설치한 후, socket.js를 실행합니다.
+websocket 컨테이너에 접속해 소켓 통신을 실행하기 전 필요한 모듈을 추가로 설치한 후, socket.js를 실행합니다.
 ```
+$ docker exec -it (websocket 컨테이너명) /bin/bash
 $ npm install --save (필요한 모듈명)
 $ node socket.js
 ```
