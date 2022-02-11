@@ -18,6 +18,20 @@ services:
         - MYSQL_PASSWORD=1234
         - MYSQL_ROOT_PASSWORD=1234
 
+  mongo:
+    image: mongo:latest
+    restart: always
+    networks:
+        - app_tier
+    volumes:
+        - ./mongo/db:/data/db
+    ports:
+        - "27017:27017"
+    environment:
+        - MONGO_HOST=localhost
+        - MONGO_PORT=27017 
+
+
   websocket:
     build:
       context: .
@@ -25,6 +39,7 @@ services:
     container_name: websocket
     links:
         - mysql_db:mysql_db
+        - mongo:mongo
     depends_on:
         - mysql_db
     networks:
