@@ -1,0 +1,44 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+      "description": "sean",
+      "version": "1.0.0",
+      "title": "Simmons-Backend",
+      "contact":{
+      "email": "5656jieun@dgu.ac.kr"
+      },
+      "license":{
+          "name":"MIT",
+          "url":"https://opensource.org/licenses/MIT"
+      }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+
+  "paths": {
+    "/check":{
+      "get":{
+        "tags": [
+          {
+          "name": "Request User's Position data"
+          } 
+        ],
+        "produces":[
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Bad GET data."
+          }
+        }
+      }
+    }
+    }
+
+}
