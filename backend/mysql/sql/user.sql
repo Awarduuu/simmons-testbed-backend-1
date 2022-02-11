@@ -1,10 +1,3 @@
-/*
-    Host : localhost / Database : grafana
-    Author : github.com/seunghwanly
-*/
-
--- Table structure for pos
-
 CREATE DATABASE `simmons_testbed`;
 USE `simmons_testbed`;
 
