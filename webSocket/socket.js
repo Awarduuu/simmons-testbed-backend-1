@@ -124,7 +124,7 @@ function ws_message_action(jsonObj) {
     // 수신된 데이터 처리부분.
     /////////////////////////////////////////////////////////////////////////
     console.log('================================================================');
-    const result_01 = spawn('python', ['store.py', JSON.stringify(jsonObj)]);
+    const result_01 = spawn('python', ['storeData.py', JSON.stringify(jsonObj)]);
     result_01.stdout.on('data', (result) => {
         console.log(result.toString());
     });

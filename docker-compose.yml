@@ -3,11 +3,12 @@ services:
   mysql_db:
     image: mysql:latest
     restart: always
+    container_name: mysqlDB
     networks:
         - app_tier
     volumes:
-        - ./mysql/db:/var/lib/mysql
-        - ./mysql/sql:/sql
+        - ./backend/mysql/db:/var/lib/mysql
+        - ./backend/mysql/sql:/sql
     ports:
         - "3306:3306"
     cap_add:
@@ -21,10 +22,11 @@ services:
   mongo:
     image: mongo:latest
     restart: always
+    container_name: mongoDB
     networks:
         - app_tier
     volumes:
-        - ./mongo/db:/data/db
+        - ./webSocket/mongo/db:/data/db
     ports:
         - "27017:27017"
     environment:
@@ -34,7 +36,7 @@ services:
 
   websocket:
     build:
-      context: .
+      context: ./webSocket
       dockerfile: ./Dockerfile
     container_name: websocket
     links:
@@ -42,12 +44,31 @@ services:
         - mongo:mongo
     depends_on:
         - mysql_db
+        - mongo
     networks:
         - app_tier
     volumes:
-       - .:/app      
+       - ./webSocket:/app      
     tty: true
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    container_name: backend
+    links:
+        - mysql_db:mysql_db
+        - mongo:mongo
+    depends_on:
+        - mysql_db
+        - mongo
+    ports:
+        - "5000:5000"
+    networks:
+        - app_tier
+    volumes:
+        - ./backend:/app
+    tty: true
 
 networks:  # 네트워크 이름 
   app_tier:

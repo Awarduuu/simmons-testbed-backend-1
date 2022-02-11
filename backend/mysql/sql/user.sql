@@ -15,9 +15,11 @@ FLUSH PRIVILEGES;
 
 DROP TABLE IF EXISTS `user`
 CREATE TABLE `user`(
+`id_num` int not null AUTO_INCREMENT first,
 `howmany` int,
 `nowcheck` boolean not null default 0,
 `xboundary` int,
-`yboundaty` int
+`yboundaty` int,
+PRIMARY KEY (`id_num`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
