@@ -10,8 +10,8 @@ db = client['radar']
 # 데이터 베이스 하위에 collection도 불러온다.
 mydoc = db['position']
 
-def getValue(): 
-    inputs = {"m2m:dbg":{"status":"SUCCESS","message":{"SenMngNo":"000100010000000102","SenDateTime":"20220209163222","SenValue":"[{\"MsgID\":1,\"TargetID\":2,\"PositionX\":3,\"PositionY\":24,\"PositionZ\":0,\"BPM\":140,\"HBR\":353,\"Therm\":0,\"rsv\":0,\"Engergy\":1773,\"Point\":0,\"Type\":0,\"status\":2,\"v1\":0,\"v2\":0,\"y1\":0,\"y2\":0}]"}}}
+def getValue(inputs): 
+    #inputs = {"m2m:dbg":{"status":"SUCCESS","message":{"SenMngNo":"000100010000000102","SenDateTime":"20220210173222","SenValue":"[{\"MsgID\":1,\"TargetID\":2,\"PositionX\":3,\"PositionY\":24,\"PositionZ\":0,\"BPM\":140,\"HBR\":353,\"Therm\":0,\"rsv\":0,\"Engergy\":1773,\"Point\":0,\"Type\":0,\"status\":2,\"v1\":0,\"v2\":0,\"y1\":0,\"y2\":0}]"}}}
     datas = json.loads(inputs['m2m:dbg']['message']['SenValue'])
     positions = []
     for data in datas:
@@ -23,13 +23,13 @@ def getValue():
         positions.append(pos)
     
     data_info = {
-        "date" : int(inputs['m2m:dbg']['message']['SenDateTime'][:-2]),
+        "date" : int(inputs['m2m:dbg']['message']['SenDateTime']),
         "data" : positions
     }
     mydoc.insert_one(data_info)
     client.close()
 
 if __name__ == '__main__': 
-    #getValue(sys.argv[1])
-    getValue()
+    getValue(sys.argv[1])
+    #getValue()
 
