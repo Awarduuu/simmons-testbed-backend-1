@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, session 
 from flask_cors import CORS
-from user import applyCheck, getNumber, getPosition
+from user import applyCheck, getNumber, getPosition, userCheck, USER
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -70,6 +70,28 @@ def check():
         elif pos[0]-data['pos_x']<5 or pos[1]-data['pos_y']<5:
             return '1'
     return '0'
+
+# 바운더리설정하고 사람 인원 설정
+@app.route('/setBound',methods=['POST'])
+def setBound():
+    bound=request.get_json()
+    
+    if userCheck(db_session):
+        user=db_session.query(USER).first()
+        user.xboundary=bound['xboundary']
+        user.yboundary=bound['yboundary']
+        db_session.commit()
+    else:
+        try:
+            new_bd=USER(check=False,xbound=bound['xboundary'],ybound=bound['yboundary'])
+            db_session.add(new_bd)
+            db_session.commit()
+        except: 
+            return '500'
+    
+    db_session.close()
+    return '200'
+    
 
 
 if __name__ == "__main__":
