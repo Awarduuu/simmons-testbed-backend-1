@@ -18,6 +18,19 @@ class USER(Base):
         self.nowcheck = check
         self.xboundary = xbound
         self.yboundary = ybound
+# 사용자가 한명이긴한데 boundary먼저 설정하면서 사용자가 생성이 되어있는지 확인        
+def userCheck(db_session):
+    try:
+        exist=db_session.query(USER).first()
+    except:
+        db_session.rollback()
+        raise
+    finally:
+        db_session.close()
+    if exist is None:
+        return False
+    else:
+        return True
 
 # 인원수 체크를 적용하는지 알아보는 함수 
 def applyCheck(db_session):
