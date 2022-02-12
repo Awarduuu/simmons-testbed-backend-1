@@ -92,6 +92,34 @@ def setBound():
     db_session.close()
     return '200'
     
+ 
+# 받아올때는 0,1로 true false를 받아오는데 저장되고 출력해보면 true false로 표현돼서 조건문엔 true false, 초기화할땐 1,0으로함
+@app.route('/storeNum',methods=['POST'])
+def storeNum():
+    pnum=request.get_json()
+    # newcheck가 0이면 howmany도 0으로 보내달라할것
+        
+    if userCheck(db_session):
+        user=db_session.query(USER).first()
+        # print(user.nowcheck,pnum['nowcheck'])
+        if pnum['nowcheck']==1: #0->1로 변경 = 센서 체크하세요 라는 의미
+            if user.nowcheck==True:
+                return '500'
+            else:
+                user.nowcheck=1
+                user.howmany=pnum['howmany']   
+                db_session.commit()      
+        elif pnum['nowcheck']==0: #1->0로 변경 = 센서 끄세요 라는 의미
+            if user.nowcheck==False:
+                return '500'
+            else:
+                user.nowcheck=0
+                user.howmany=pnum['howmany']
+                db_session.commit()      
+        return '200'
+       
+    else: #바운더리부터
+        return '500'
 
 
 if __name__ == "__main__":
