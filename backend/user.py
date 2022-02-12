@@ -76,7 +76,7 @@ def getPosition(db_session):
         db_session.close()
 
     if pos is not None:
-        return [pos.xboundary, pos.yboundaty]
+        return [pos.xboundary, pos.yboundary]
     else :
         return [0,0]
 
