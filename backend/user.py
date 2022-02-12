@@ -6,18 +6,18 @@ Base = declarative_base()
 
 class USER(Base):
     __tablename__='USER'
-
+    
     id_num = Column(Integer, nullable=False, primary_key=True)
-    howmany = Column(Integer, nullable=False)
+    howmany = Column(Integer)
     nowcheck = Column(Boolean, nullable=False)
-    xboundary = Column(Integer, nullable=False)
-    yboundaty = Column(Integer, nullable=False)
+    xboundary = Column(Integer,nullable=False)
+    yboundary = Column(Integer,nullable=False)
 
-    def __init__(self, peop, check, xbound, ybound):
-        self.howmany = peop
+    def __init__(self, check,xbound, ybound):
+        # self.howmany = peop
         self.nowcheck = check
         self.xboundary = xbound
-        self.yboundaty = ybound
+        self.yboundary = ybound
 
 # 인원수 체크를 적용하는지 알아보는 함수 
 def applyCheck(db_session):
