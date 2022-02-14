@@ -11,8 +11,8 @@ CREATE TABLE `user`(
 `id_num` int not null AUTO_INCREMENT first,
 `howmany` int,
 `nowcheck` boolean not null default 0,
-`xboundary` int,
-`yboundaty` int,
+`xboundary` int not null,
+`yboundary` int not null,
 PRIMARY KEY (`id_num`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

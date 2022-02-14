@@ -6,18 +6,31 @@ Base = declarative_base()
 
 class USER(Base):
     __tablename__='USER'
-
+    
     id_num = Column(Integer, nullable=False, primary_key=True)
-    howmany = Column(Integer, nullable=False)
+    howmany = Column(Integer)
     nowcheck = Column(Boolean, nullable=False)
-    xboundary = Column(Integer, nullable=False)
-    yboundaty = Column(Integer, nullable=False)
+    xboundary = Column(Integer,nullable=False)
+    yboundary = Column(Integer,nullable=False)
 
-    def __init__(self, peop, check, xbound, ybound):
-        self.howmany = peop
+    def __init__(self, check,xbound, ybound):
+        # self.howmany = peop
         self.nowcheck = check
         self.xboundary = xbound
-        self.yboundaty = ybound
+        self.yboundary = ybound
+# 사용자가 한명이긴한데 boundary먼저 설정하면서 사용자가 생성이 되어있는지 확인        
+def userCheck(db_session):
+    try:
+        exist=db_session.query(USER).first()
+    except:
+        db_session.rollback()
+        raise
+    finally:
+        db_session.close()
+    if exist is None:
+        return False
+    else:
+        return True
 
 # 인원수 체크를 적용하는지 알아보는 함수 
 def applyCheck(db_session):
@@ -63,7 +76,7 @@ def getPosition(db_session):
         db_session.close()
 
     if pos is not None:
-        return [pos.xboundary, pos.yboundaty]
+        return [pos.xboundary, pos.yboundary]
     else :
         return [0,0]
 

@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, session 
 from flask_cors import CORS
-from user import applyCheck, getNumber, getPosition
+from user import applyCheck, getNumber, getPosition, userCheck, USER
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -70,6 +70,56 @@ def check():
         elif pos[0]-data['pos_x']<5 or pos[1]-data['pos_y']<5:
             return '1'
     return '0'
+
+# 바운더리설정하고 사람 인원 설정
+@app.route('/setBound',methods=['POST'])
+def setBound():
+    bound=request.get_json()
+    
+    if userCheck(db_session):
+        user=db_session.query(USER).first()
+        user.xboundary=bound['xboundary']
+        user.yboundary=bound['yboundary']
+        db_session.commit()
+    else:
+        try:
+            new_bd=USER(check=False,xbound=bound['xboundary'],ybound=bound['yboundary'])
+            db_session.add(new_bd)
+            db_session.commit()
+        except: 
+            return '500'
+    
+    db_session.close()
+    return '200'
+    
+ 
+# 받아올때는 0,1로 true false를 받아오는데 저장되고 출력해보면 true false로 표현돼서 조건문엔 true false, 초기화할땐 1,0으로함
+@app.route('/storeNum',methods=['POST'])
+def storeNum():
+    pnum=request.get_json()
+    # newcheck가 0이면 howmany도 0으로 보내달라할것
+        
+    if userCheck(db_session):
+        user=db_session.query(USER).first()
+        # print(user.nowcheck,pnum['nowcheck'])
+        if pnum['nowcheck']==1: #0->1로 변경 = 센서 체크하세요 라는 의미
+            if user.nowcheck==True:
+                return '500'
+            else:
+                user.nowcheck=1
+                user.howmany=pnum['howmany']   
+                db_session.commit()      
+        elif pnum['nowcheck']==0: #1->0로 변경 = 센서 끄세요 라는 의미
+            if user.nowcheck==False:
+                return '500'
+            else:
+                user.nowcheck=0
+                user.howmany=pnum['howmany']
+                db_session.commit()      
+        return '200'
+       
+    else: #바운더리부터
+        return '500'
 
 
 if __name__ == "__main__":
