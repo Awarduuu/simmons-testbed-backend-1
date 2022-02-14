@@ -19,6 +19,71 @@
   ],
 
   "paths": {
+
+    "/setBound":{
+      "post":{
+        "tags": [
+          {
+            "name": "Set Boundary"
+          }
+        ],
+        "requestBody": {
+          "description": "Set Boundary Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Boundary"
+              }
+            }
+          }
+        },
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "description": "Failed. Bad post data."
+        }
+      }
+      }
+    },
+
+    "/storeNum":{
+      "post":{
+        "tags": [
+          {
+            "name": "Store Number"
+          }
+        ],
+        "requestBody": {
+          "description": "Store Number Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Store"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Bad post data."
+          }
+        }
+      }
+    },
+
     "/check":{
       "get":{
         "tags": [
@@ -39,6 +104,36 @@
         }
       }
     }
+    },
+
+    "components":{
+      "schemas":{
+        "Boundary": {
+          "type": "object",
+          "properties": {
+            "xboundary": {
+              "type": "string"
+            },
+            "yboundary": {
+              "type": "string"
+            }
+          }
+        },
+
+        "Store":{
+          "type": "object",
+          "properties": {
+            "nowcheck":{
+              "type": "string"
+            },
+            "howmany":{
+              "type": "string"
+            }
+          }
+        }
+
+
+      }
     }
 
 }
