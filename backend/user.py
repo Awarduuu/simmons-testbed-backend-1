@@ -1,6 +1,8 @@
+from curses.ascii import CR
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Integer, Boolean
+from sqlalchemy import Column, String, Integer, Boolean, DateTime
 from sqlalchemy.orm import session
+import datetime
 
 Base = declarative_base()
 
@@ -18,7 +20,40 @@ class USER(Base):
         self.nowcheck = check
         self.xboundary = xbound
         self.yboundary = ybound
-# 사용자가 한명이긴한데 boundary먼저 설정하면서 사용자가 생성이 되어있는지 확인        
+        
+# 사용자가 한명이긴한데 boundary먼저 설정하면서 사용자가 생성이 되어있는지 확인       
+ 
+class CryDetect(Base):
+    __tablename__='CryDetect'
+    
+    id_num = Column(Integer, nullable=False, primary_key=True)
+    sound = Column(Integer,nullable=False)
+    result = Column(Integer, nullable=False)
+    created_at = Column(DateTime, nullable=False)
+
+    def __init__(self, sound, result, dt):
+        self.sound = sound
+        self.result = result
+        self.created_at = dt
+ 
+def findDetect(db_session,id):
+    
+    try:
+        exist=db_session.query(CryDetect).filter(CryDetect.id_num==id).first()
+        
+    except:
+        db_session.rollback()
+        
+    finally:
+       
+        db_session.close()
+ 
+    if exist is None:
+        
+        return False
+    else:
+        return True
+    
 def userCheck(db_session):
     try:
         exist=db_session.query(USER).first()
