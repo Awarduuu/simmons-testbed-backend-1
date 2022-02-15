@@ -1,11 +1,13 @@
+import json
 from flask import Flask, request, jsonify, session 
 from flask_cors import CORS
-from user import applyCheck, getNumber, getPosition, userCheck, USER
+from user import applyCheck, getNumber, getPosition, userCheck, findDetect, USER, CryDetect
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask_swagger_ui import get_swaggerui_blueprint
 from pymongo import MongoClient
-
+from rpi_main.make_prediction import PredictAndReturn
+import datetime
 
 app = Flask(__name__,static_url_path='',static_folder="static") 
 app.config['JSON_AS_ASCII'] = False
@@ -120,6 +122,54 @@ def storeNum():
        
     else: #바운더리부터
         return '500'
+    
+
+@app.route('/cryDetect',methods=['POST'])
+def cryDetect():
+    # index 0 : 울음, 1 : 코골이, 2 : 웃음소리, 3 : 정적
+    # json 에서 sound 범위는 0~3
+    ck=request.get_json()
+    if 0<=ck['sound']<=3:
+        sound=ck['sound']
+        ml=["realcry.wav","nosesound.ogg","laugh.wav","silence.wav"]
+        
+        result=PredictAndReturn(ml[sound])
+        # print(result,type(result))
+        result=int(result)
+        now=datetime.datetime.now()
+        now=now.strftime('%Y-%m-%d %H:%M:%S')
+        print(now)
+        new_record=CryDetect(sound=sound,result=result,dt=now)
+        db_session.add(new_record)
+        db_session.commit()
+        # print(new_record.id_num)
+        dic={"result":200,"new_id":new_record.id_num}
+        r=jsonify(dic)
+        return r
+    else:
+        return '500'
+    
+@app.route('/getDetect',methods=['GET'])
+def getDetect():
+    find_id=request.args.to_dict()
+    ml=["realcry.wav","nosesound.ogg","laugh.wav","silence.wav"]
+    if findDetect(db_session,find_id['id']): #id 존재여부
+           
+        info=db_session.query(CryDetect).filter(CryDetect.id_num==find_id['id']).first()
+        
+        dic={"id":info.id_num,"result":info.result,"sound":ml[info.sound],"created_at":info.created_at}
+        # print(dic)
+        dic=jsonify(dic)
+        # print(dic)
+        return dic
+    else:
+        return '500' 
+    # return '200'
+
+    
+       
+    
+    
 
 
 if __name__ == "__main__":

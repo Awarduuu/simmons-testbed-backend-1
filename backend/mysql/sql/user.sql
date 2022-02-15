@@ -16,3 +16,8 @@ CREATE TABLE `user`(
 PRIMARY KEY (`id_num`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ create table CryDetect(
+ id_num int not null AUTO_INCREMENT primary key, 
+ sound int not null, 
+ result int not null, 
+ created_at datetime not null);
