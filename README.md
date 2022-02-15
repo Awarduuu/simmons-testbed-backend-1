@@ -39,6 +39,26 @@ var usebtswsport = '';    //  테스트베드 port입니다.
 var usebtswslocaluserid = '';    //  테스트베드에 등록된 사용자입니다.
 ```
 
+3. Local에 설치
+
+일단 node, requirements.txt에 있는 파이썬 패키지, mysql이 설치되어 있어야 합니다.
+
+그 후, mysql에 접속하여 grafana.sql을 실행합니다.
+
+그리고, 2번에 node 실행에 필요한 모듈을 모두 설치 후 socket.js를 실행하면 됩니다.
+
+이때, config.py에서 데이터베이스 연결 부분을 아래와 같이 수정합니다.
+```
+db = {
+    'user'     : 'user',
+    'password' : '1234',
+    'host'     : 'localhost', // 본인 컴퓨터 데이터베이스로 연결할수 있는 ip 
+    'port'     : 3306,
+    'database' : 'radar'
+}
+
+```
+
 ---
 ## Backend
 

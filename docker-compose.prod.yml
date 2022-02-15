@@ -1,0 +1,90 @@
+version: '3'
+services:
+  mysql_db:
+    image: mysql:latest
+    restart: always
+    container_name: mysqlDB
+    networks:
+        - app_tier
+    volumes:
+        - ./backend/mysql/db:/var/lib/mysql
+        - ./backend/mysql/sql:/sql
+    ports:
+        - "3306:3306"
+    cap_add:
+        - SYS_NICE
+    environment:
+        - MYSQL_DATABASE=app
+        - MYSQL_USER=user
+        - MYSQL_PASSWORD=1234
+        - MYSQL_ROOT_PASSWORD=1234
+
+  mongo:
+    image: mongo:latest
+    restart: always
+    container_name: mongoDB
+    networks:
+        - app_tier
+    volumes:
+        - ./webSocket/mongo/db:/data/db
+    ports:
+        - "27017:27017"
+    environment:
+        - MONGO_HOST=localhost
+        - MONGO_PORT=27017 
+
+
+  websocket:
+    build:
+      context: ./webSocket
+      dockerfile: ./Dockerfile
+    container_name: websocket
+    links:
+        - mysql_db:mysql_db
+        - mongo:mongo
+    depends_on:
+        - mysql_db
+        - mongo
+    networks:
+        - app_tier
+    volumes:
+        - ./webSocket:/app      
+    tty: true
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    container_name: backend
+    links:
+        - mysql_db:mysql_db
+        - mongo:mongo
+    depends_on:
+        - mysql_db
+        - mongo
+    ports:
+        - "5000:5000"
+    networks:
+        - app_tier
+    volumes:
+        - ./backend:/app
+    tty: true
+    command: gunicorn -w 1 -b 0.0.0.0:5000 run:app
+
+    # web server
+  nginx:
+    image: nginx:latest
+    ports:
+        - 8000:8000
+    container_name: nginx
+    volumes:
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+        - backend
+    networks:
+        - app_tier
+    restart: on-failure
+
+networks:  # 네트워크 이름 
+  app_tier:
+    driver: bridge  # 컨테이너를 bridge로 연결

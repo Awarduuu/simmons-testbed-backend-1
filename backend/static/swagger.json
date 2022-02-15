@@ -1,0 +1,139 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+      "description": "sean",
+      "version": "1.0.0",
+      "title": "Simmons-Backend",
+      "contact":{
+      "email": "5656jieun@dgu.ac.kr"
+      },
+      "license":{
+          "name":"MIT",
+          "url":"https://opensource.org/licenses/MIT"
+      }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+
+  "paths": {
+
+    "/setBound":{
+      "post":{
+        "tags": [
+          {
+            "name": "Set Boundary"
+          }
+        ],
+        "requestBody": {
+          "description": "Set Boundary Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Boundary"
+              }
+            }
+          }
+        },
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "description": "Failed. Bad post data."
+        }
+      }
+      }
+    },
+
+    "/storeNum":{
+      "post":{
+        "tags": [
+          {
+            "name": "Store Number"
+          }
+        ],
+        "requestBody": {
+          "description": "Store Number Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Store"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Bad post data."
+          }
+        }
+      }
+    },
+
+    "/check":{
+      "get":{
+        "tags": [
+          {
+          "name": "Request User's Position data"
+          } 
+        ],
+        "produces":[
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Bad GET data."
+          }
+        }
+      }
+    }
+    },
+
+    "components":{
+      "schemas":{
+        "Boundary": {
+          "type": "object",
+          "properties": {
+            "xboundary": {
+              "type": "string"
+            },
+            "yboundary": {
+              "type": "string"
+            }
+          }
+        },
+
+        "Store":{
+          "type": "object",
+          "properties": {
+            "nowcheck":{
+              "type": "string"
+            },
+            "howmany":{
+              "type": "string"
+            }
+          }
+        }
+
+
+      }
+    }
+
+}

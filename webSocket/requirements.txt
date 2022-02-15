@@ -1,5 +1,2 @@
 jsonify
-pymysql
-flask_cors
-flask_sqlalchemy
-mysql-connector-python
+pymongo
