@@ -22,5 +22,7 @@ RUN pip3 install markupsafe==1.0.0
 RUN pip3 install -r requirements.txt 
 
 RUN npm install --save ip
+RUN npm install --save websocket
+RUN npm install --save shortid
 
 
