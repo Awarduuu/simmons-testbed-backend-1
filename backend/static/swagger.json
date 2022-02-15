@@ -1,27 +1,25 @@
 {
   "openapi": "3.0.0",
   "info": {
-      "description": "sean",
-      "version": "1.0.0",
-      "title": "Simmons-Backend",
-      "contact":{
+    "description": "sean",
+    "version": "1.0.0",
+    "title": "Simmons-Backend",
+    "contact": {
       "email": "5656jieun@dgu.ac.kr"
-      },
-      "license":{
-          "name":"MIT",
-          "url":"https://opensource.org/licenses/MIT"
-      }
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
   },
   "servers": [
     {
       "url": "/"
     }
   ],
-
   "paths": {
-
-    "/setBound":{
-      "post":{
+    "/setBound": {
+      "post": {
         "tags": [
           {
             "name": "Set Boundary"
@@ -38,22 +36,21 @@
             }
           }
         },
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "200": {
-          "description": "OK"
-        },
-        "400": {
-          "description": "Failed. Bad post data."
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Bad post data."
+          }
         }
       }
-      }
     },
-
-    "/storeNum":{
-      "post":{
+    "/storeNum": {
+      "post": {
         "tags": [
           {
             "name": "Store Number"
@@ -83,15 +80,74 @@
         }
       }
     },
-
-    "/check":{
-      "get":{
+    "/check": {
+      "get": {
         "tags": [
           {
-          "name": "Request User's Position data"
-          } 
+            "name": "Request User's Position data"
+          }
         ],
-        "produces":[
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Bad GET data."
+          }
+        }
+      }
+    },
+    "/cryDetect": {
+      "post": {
+        "tags": [
+          {
+            "name": "Detect Crying"
+          }
+        ],
+        "requestBody": {
+          "description": "Detect Crying Request Body",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cry"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Bad post data."
+          }
+        }
+      }
+    },
+    "/getDetect?id={id}": {
+      "get": {
+        "tags": [
+          {
+            "name": "Request Detection data"
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "userID",
+            "type": "string"
+          }
+        ],
+        "produces": [
           "application/json"
         ],
         "responses": {
@@ -104,36 +160,39 @@
         }
       }
     }
-    },
-
-    "components":{
-      "schemas":{
-        "Boundary": {
-          "type": "object",
-          "properties": {
-            "xboundary": {
-              "type": "string"
-            },
-            "yboundary": {
-              "type": "string"
-            }
-          }
-        },
-
-        "Store":{
-          "type": "object",
-          "properties": {
-            "nowcheck":{
-              "type": "string"
-            },
-            "howmany":{
-              "type": "string"
-            }
+  },
+  "components": {
+    "schemas": {
+      "Boundary": {
+        "type": "object",
+        "properties": {
+          "xboundary": {
+            "type": "string"
+          },
+          "yboundary": {
+            "type": "string"
           }
         }
-
-
+      },
+      "Store": {
+        "type": "object",
+        "properties": {
+          "nowcheck": {
+            "type": "string"
+          },
+          "howmany": {
+            "type": "string"
+          }
+        }
+      },
+      "Cry": {
+        "type": "object",
+        "properties": {
+          "sound": {
+            "type": "string"
+          }
+        }
       }
     }
-
+  }
 }
