@@ -7,20 +7,20 @@ import datetime
 Base = declarative_base()
 
 class USER(Base):
-    __tablename__='USER'
+    __tablename__='user'
     
     id_num = Column(Integer, nullable=False, primary_key=True)
-    howmany = Column(Integer)
+    howmany = Column(Integer, nullable=False)
     nowcheck = Column(Boolean, nullable=False)
     xboundary = Column(Integer,nullable=False)
     yboundary = Column(Integer,nullable=False)
 
-    def __init__(self, check,xbound, ybound):
-        # self.howmany = peop
+    def __init__(self, peop, check, xbound, ybound):
+        self.howmany = peop
         self.nowcheck = check
         self.xboundary = xbound
         self.yboundary = ybound
-        
+
 # 사용자가 한명이긴한데 boundary먼저 설정하면서 사용자가 생성이 되어있는지 확인       
  
 class CryDetect(Base):

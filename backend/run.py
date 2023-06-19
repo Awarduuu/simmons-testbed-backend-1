@@ -33,7 +33,7 @@ swaggerui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
     config = {
-        'app_name':"Drugger"
+        'app_name':"simmons"
     }
 )
 
@@ -129,20 +129,20 @@ def cryDetect():
     # index 0 : 울음, 1 : 코골이, 2 : 웃음소리, 3 : 정적
     # json 에서 sound 범위는 0~3
     ck=request.get_json()
-    if 0<=ck['sound']<=3:
-        sound=ck['sound']
+    if 0<=int(ck['sound'])<=3:
+        sound=int(ck['sound'])
         ml=["realcry.wav","nosesound.ogg","laugh.wav","silence.wav"]
         
         result=PredictAndReturn(ml[sound])
-        # print(result,type(result))
+        #print(result,type(result))
         result=int(result)
         now=datetime.datetime.now()
         now=now.strftime('%Y-%m-%d %H:%M:%S')
-        print(now)
+        #print(now)
         new_record=CryDetect(sound=sound,result=result,dt=now)
         db_session.add(new_record)
         db_session.commit()
-        # print(new_record.id_num)
+        #print(new_record.id_num)
         dic={"result":200,"new_id":new_record.id_num}
         r=jsonify(dic)
         return r
